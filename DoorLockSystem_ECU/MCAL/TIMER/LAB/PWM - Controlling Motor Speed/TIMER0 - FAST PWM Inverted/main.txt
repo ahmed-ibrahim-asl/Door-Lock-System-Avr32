@@ -1,0 +1,32 @@
+/*
+ * main.c
+ *
+ *  Created on: Dec 30, 2023
+ *      Author: ad
+ */
+
+/******************** Include Section Start ********************/
+#include "MCAL/DIO/DIO_interface.h"
+#include "MCAL/TWI/TWI_interface.h"
+#include "HAL/LCD/LCD_HAL_interface.h"
+#include <util/delay.h>
+#include "MCAL/TIMER/TIMER_interface.h"
+/****************************************************************/
+
+
+
+
+int main(void) {
+    // Set PB0 as output
+    DIO_enuSetPinDirection(DIO_u8PortB, DIO_u8PIN0, DIO_u8OUTPUT);
+    TIMER0_voidInit();
+
+
+    while (1) {
+    	TIMER0_voidSetPWM(30);
+
+
+    }
+
+    return 0;
+}
