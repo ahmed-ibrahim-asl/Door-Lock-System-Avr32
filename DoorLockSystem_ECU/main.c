@@ -8,12 +8,14 @@
 // ECU
 /*********** Include  Section ***********/
 
-#include "MCAL/DIO/DIO_interface.h"
-#include "MCAL/TIMER/TIMER_interface.h"
-#include "MCAL/UART/UART_interface.h"
 #include "HAL/EEPROM/EEPROM_interface.h"
 #include "HAL/BUZZER/BUZZER_interface.h"
 #include "HAL/LCD/LCD_HAL_interface.h"
+
+#include "MCAL/DIO/DIO_interface.h"
+#include "MCAL/TIMER/TIMER_interface.h"
+#include "MCAL/UART/UART_interface.h"
+
 #include <util/delay.h>
 /****************************************/
 
@@ -80,10 +82,17 @@ int main(void) {
     		case 'C':
     			UART_enuRecieveString(Rx_Buffer);
 
+
     			EEPROM_WriteDataSequence(&EEPROM_MAIN, Rx_Buffer, 5, 'X', 0x00);
 
-
+    			LCD_u8SendString("created");
             	UART_enuSendChar('L');
+
+            break;
+
+    		case 'H':
+    			UART_enuRecieveString(Rx_Buffer);
+    			EEPROM_WriteDataSequence(&EEPROM_MAIN, Rx_Buffer, 5, 'X', 0x00);
 
             break;
     		case 'L':

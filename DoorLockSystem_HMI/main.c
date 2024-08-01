@@ -7,17 +7,46 @@
 /*********** Include  Section ***********/
 #include "MCAL/DIO/DIO_interface.h"
 #include "MCAL/UART/UART_interface.h"
+#include "MCAL/EXTI/EXTI_interface.h"
+#include "MCAL/GIE/GIE_interface.h"
+
 #include "HAL/LCD/LCD_HAL_interface.h"
 #include "HAL/KEYPAD/keypad_HAL_interface.h"
 
+
+
+
 #include <util/delay.h>
-void Handle_keyInput(uint8_t Copy_u8dataType);
 
 /****************************/
+
+void Handle_keyInput(uint8_t Copy_u8dataType);
 
 uint8_t Tx_Buffer[5] = {0};
 uint8_t Rx_buffer = 0;
 uint8_t Global_u8IsLoggedIn = 0;
+
+
+void temp(){
+
+
+	if(Global_u8IsLoggedIn){
+		LCD_enuClearDisplay();
+		LCD_u8SendString("Set New Password: ");
+		LCD_u8SetPosXY(0, 2);
+		// handle keyInput
+		Handle_keyInput('H');
+		LCD_enuClearDisplay();
+
+		LCD_u8SendString("Door, ON-1|OFF-0");
+		LCD_u8SetPosXY(0, 2);
+		LCD_u8SendString("SYS, OFF 00: ");
+
+
+	}
+}
+
+
 
 int main() {
     UART_vidInit(9600);
@@ -26,10 +55,19 @@ int main() {
     keypad_enuInit();
 
 
+	EXTI_enuSetSenseLevel(0, EXTI_RISING_EDGE);
+	EXTI_enuSetCallBack(temp, 0);
+	EXTI_enuEnableInterrupt(0);
+	GIE_enuEnable();
+
+
 
 	// Telling ECU: Hey, I Am awake
 	UART_enuSendChar('S');
 	while (1) {
+
+
+
 		UART_enuRecieveChar(&Rx_buffer);
 
         switch(Rx_buffer){
@@ -69,15 +107,22 @@ int main() {
         		Global_u8IsLoggedIn = 0;
         		UART_enuSendChar('X');
 
-
-
         }
+
+
+
+
 
         if(Global_u8IsLoggedIn){
         	/*
         	 *
         	 *
         	 * */
+
+
+
+
+
         	LCD_enuClearDisplay();
 			LCD_u8SendString("Door, ON-1|OFF-0");
 			LCD_u8SetPosXY(0, 2);
@@ -106,13 +151,14 @@ void Handle_keyInput(uint8_t Copy_u8dataType) {
 
 
     while (1) {
+
         keyStatus = keypad_enuGetPressedKey(&padPressedValue);
 
         if (keyStatus == 0 && padPressedValue != 0) {
             if (padPressedValue != 'K') {
                 switch (Copy_u8dataType) {
                     case 'L':
-                    case 'C':
+                    case 'C': case 'H':
                         if (Local_u8TxIndex < 5) {
                             LCD_enuSendData(padPressedValue);
                             Tx_Buffer[Local_u8TxIndex++] = padPressedValue;
