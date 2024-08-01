@@ -67,6 +67,7 @@ int main() {
         	break;
         	case 'X':
         		Global_u8IsLoggedIn = 0;
+        		UART_enuSendChar('X');
 
 
 

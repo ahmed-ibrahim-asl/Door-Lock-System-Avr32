@@ -127,7 +127,7 @@ int main(void) {
     			LCD_u8SendString((char*)Rx_Buffer);
 
     			if(Rx_Buffer[0] == '0' && Rx_Buffer[1] == '0'){
-    				UART_enuSendChar('L');
+    				UART_enuSendChar('X');
 
     			}else if(Rx_Buffer[0] == '1'){
     				// ON
@@ -150,6 +150,8 @@ int main(void) {
 
 
     		break;
+    		case 'X':
+    			UART_enuSendChar('L');
     	}
 
     }
