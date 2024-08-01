@@ -30,10 +30,10 @@ int main() {
 	// Telling ECU: Hey, I Am awake
 	UART_enuSendChar('S');
 	while (1) {
-        UART_enuRecieveChar(&Rx_buffer);
+		UART_enuRecieveChar(&Rx_buffer);
 
         switch(Rx_buffer){
-        	case 'Y':
+        	case 'E':	case 'L':
         		LCD_enuClearDisplay();
         		LCD_u8SetPosXY(0, 0);
 
@@ -44,6 +44,7 @@ int main() {
 
         	break;
         	case 'N':
+
         		LCD_u8SendString("Set New Password: ");
         		LCD_u8SetPosXY(0, 2);
         		// handle keyInput
@@ -63,15 +64,13 @@ int main() {
         		LCD_enuClearDisplay();
         		LCD_u8SetPosXY(0, 0);
         		Global_u8IsLoggedIn = 1;
-
         	break;
         	case 'X':
         		Global_u8IsLoggedIn = 0;
-        		Rx_buffer = 'Y';
+
+
+
         }
-
-
-
 
         if(Global_u8IsLoggedIn){
         	/*
@@ -79,14 +78,21 @@ int main() {
         	 *
         	 * */
         	LCD_enuClearDisplay();
-			LCD_u8SendString("ON: 1 | OFF: 0 ");
+			LCD_u8SendString("Door, ON-1|OFF-0");
 			LCD_u8SetPosXY(0, 2);
+			LCD_u8SendString("Wrong enter Pass:");
 			Handle_keyInput('R');
 
 
+        }else{
+    		LCD_enuClearDisplay();
+    		LCD_u8SetPosXY(0, 0);
+
+    		LCD_u8SendString("Enter Password: ");
+    		LCD_u8SetPosXY(0, 2);
+    		// handle keyInput
+    		Handle_keyInput('L');
         }
-
-
 
 
 
@@ -105,6 +111,7 @@ void Handle_keyInput(uint8_t Copy_u8dataType) {
     uint8_t padPressedValue = 0;
     uint8_t Local_u8TxIndex = 0;
 
+
     while (1) {
         keyStatus = keypad_enuGetPressedKey(&padPressedValue);
 
@@ -121,18 +128,13 @@ void Handle_keyInput(uint8_t Copy_u8dataType) {
 
 
                     case 'R':
-                        if (Local_u8TxIndex < 1) {
+                        if (Local_u8TxIndex < 2) {
 
-                        	if(padPressedValue == '7'){
-                        		UART_enuSendChar('X');
-                        		return;
-                        	}
-
-                        	if(padPressedValue == '1' || padPressedValue == '0'){
-								LCD_enuSendData(padPressedValue);
-								Tx_Buffer[Local_u8TxIndex++] = padPressedValue;
-                        	}
-
+                            if (padPressedValue == '1' || padPressedValue == '0') {
+                                LCD_enuSendData(padPressedValue);
+                                Tx_Buffer[Local_u8TxIndex++] = padPressedValue;
+                            }
+                            break;
                         }
                         break;
                 }
@@ -140,7 +142,12 @@ void Handle_keyInput(uint8_t Copy_u8dataType) {
                 Tx_Buffer[Local_u8TxIndex] = '\0';
                 UART_enuSendChar(Copy_u8dataType);
                 UART_enuSendString(Tx_Buffer);
-                memset(Tx_Buffer, 0, sizeof(Tx_Buffer));
+
+                for(int i = 0; i<sizeof(Tx_Buffer); i++){
+                	Tx_Buffer[i] = 0;
+                }
+
+
                 Local_u8TxIndex = 0;
                 break;
             }
