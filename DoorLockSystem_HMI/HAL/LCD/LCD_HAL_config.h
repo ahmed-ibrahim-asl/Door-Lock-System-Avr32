@@ -23,14 +23,14 @@
 /******************* Control Pins *******************/
 
 #define RS_PORT 			    	DIO_u8PortD
-#define RS_PIN						DIO_u8PIN2
+#define RS_PIN						DIO_u8PIN6
 
 
 #define RW_PORT						DIO_u8PortD
 #define RW_PIN						DIO_u8PIN7
 
 #define EN_PORT 					DIO_u8PortD
-#define EN_PIN						DIO_u8PIN3
+#define EN_PIN						DIO_u8PIN7
 /***************************************************/
 
 

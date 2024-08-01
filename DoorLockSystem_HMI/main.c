@@ -80,18 +80,10 @@ int main() {
         	LCD_enuClearDisplay();
 			LCD_u8SendString("Door, ON-1|OFF-0");
 			LCD_u8SetPosXY(0, 2);
-			LCD_u8SendString("Wrong enter Pass:");
+			LCD_u8SendString("SYS, OFF 00: ");
 			Handle_keyInput('R');
 
 
-        }else{
-    		LCD_enuClearDisplay();
-    		LCD_u8SetPosXY(0, 0);
-
-    		LCD_u8SendString("Enter Password: ");
-    		LCD_u8SetPosXY(0, 2);
-    		// handle keyInput
-    		Handle_keyInput('L');
         }
 
 
@@ -158,7 +150,6 @@ void Handle_keyInput(uint8_t Copy_u8dataType) {
         }
     }
 }
-
 
 
 
