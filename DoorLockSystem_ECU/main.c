@@ -143,7 +143,7 @@ int main(void) {
     				DIO_enuSetPinValue(DIO_u8PortB, DIO_u8PIN3, DIO_u8HIGH);
     				DIO_enuSetPinValue(DIO_u8PortB, DIO_u8PIN4, DIO_u8LOW);
 
-    				// TELL the HMI, data is received and i handle it you can send again
+    		    	// TELL the HMI, data is received and i handle it you can send again
     				UART_enuSendChar('R');
 
     			}else if(Rx_Buffer[0] == '0'){
